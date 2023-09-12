@@ -15,7 +15,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   wechat_camera_picker: ^4.0.1
-  wechat_assets_picker: ^8.7.0
+  wechat_assets_picker: ^8.7.0 #图片选择器
+  extended_image: ^8.1.1 #图片浏览器
 
 dev_dependencies:
   flutter_test:
