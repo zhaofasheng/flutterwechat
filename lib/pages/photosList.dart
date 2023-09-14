@@ -11,8 +11,12 @@ class photoList extends StatelessWidget {
   final void Function(int)? onTap;
   final void Function(bool)? onDragBlock;
   final List<AssetEntity> selectedPhotos;
-
-  photoList({required this.selectedPhotos,required this.onTap,required this.onDragBlock});
+  final void Function(bool,String)? onOrderTap;
+  final void Function(AssetEntity,AssetEntity)? onAcceptTap;
+  final bool isWillOrder;
+  //被拖拽的id
+  final String targetAeeseId;
+  photoList({required this.selectedPhotos,required this.onTap,required this.onDragBlock,required this.onOrderTap,required this.onAcceptTap, required this.isWillOrder, required this.targetAeeseId});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class photoList extends StatelessWidget {
       padding: EdgeInsets.all(spacing),
       child: LayoutBuilder(
         builder: (BuildContext context,BoxConstraints constraints){
-          final double width = (constraints.maxWidth - spacing*2)/3;
+          final double width = (constraints.maxWidth - spacing*2 - imagePadding*6)/3;
           return   Wrap(
             spacing: spacing,
             runSpacing: spacing,
@@ -33,6 +37,14 @@ class photoList extends StatelessWidget {
                   onDragTap: (bool isDrage) {
                     onDragBlock?.call(isDrage);
                   },
+                  onOrderTap: (bool isWillOrder, String targetAssetid) {
+                    onOrderTap?.call(isWillOrder,targetAssetid);
+                  },
+                  onAcceptTap: (AssetEntity data,AssetEntity asset) {
+                    onAcceptTap?.call(data,asset);
+                  },
+                  isWillOrder: isWillOrder,
+                  targetAeeseId: targetAeeseId,
                 ),
               if(selectedPhotos.length < 6)
                 GestureDetector(

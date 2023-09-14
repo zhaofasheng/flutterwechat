@@ -20,6 +20,10 @@ class _PostEditPageState extends State<PostEditPage> {
   //是否将要删除
   bool isWillRemove = false;
 
+  //是否将要排序
+  bool isWillOrder = false;
+  //被拖拽的id
+  String targetAeeseId = "";
 
   Future<void> _choicePhotos() async {
     final List<AssetEntity>? result = await AssetPicker.pickAssets(
@@ -65,7 +69,6 @@ class _PostEditPageState extends State<PostEditPage> {
         );
       },
 
-
       onWillAccept: (data){
         setState(() {
           isWillRemove = true;
@@ -104,6 +107,27 @@ class _PostEditPageState extends State<PostEditPage> {
                 isDragNow = isDrag;
               });
           },
+          onOrderTap: (bool isWillOrd, String assetId) {
+            setState(() {
+              isWillOrder = isWillOrd;
+              targetAeeseId = assetId;
+            });
+          },
+          onAcceptTap: (AssetEntity data,AssetEntity asset) {
+
+            //从队列中删除拖拽对象
+            final int index = selectedAssests.indexOf(data);
+            selectedAssests.removeAt(index);
+            //将拖拽对象插入到目标对象之前
+            final int targetIndex = selectedAssests.indexOf(asset);
+            selectedAssests.insert(targetIndex, data);
+
+            setState(() {
+              isWillOrder = false;
+              targetAeeseId = "";
+            });
+          }, isWillOrder: isWillOrder,
+          targetAeeseId: targetAeeseId,
         ),
 
         const Spacer(),
